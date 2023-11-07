@@ -8,15 +8,15 @@ def main():
     file_path = "Final_Datasets/Paired_Embedded_Cleaned"
     code_data = utils.load_data(file_path=file_path)
 
-    ai_embedding = np.stack(code_data[code_data["is_gpt"]]["embedding"].values)
-    human_embedding = np.stack(code_data[~code_data["is_gpt"]]["embedding"].values)
-    assert ai_embedding.shape[0] == human_embedding.shape[0]
+    ai_code = code_data[code_data["is_gpt"]]["code"].values
+    human_code = code_data[~code_data["is_gpt"]]["code"].values
+    assert ai_code.shape[0] == human_code.shape[0]
 
     X_AI_train, X_AI_test = train_test_split(
-        ai_embedding, test_size=0.2, random_state=42
+        utils._tfidf(ai_code), test_size=0.2, random_state=42
     )
     X_human_train, X_human_test = train_test_split(
-        human_embedding, test_size=0.2, random_state=42
+        utils._tfidf(human_code), test_size=0.2, random_state=42
     )
     X_test = np.concatenate((X_AI_test, X_human_test))
     Y_test = np.concatenate((np.ones(len(X_AI_test)), np.zeros(len(X_human_test))))

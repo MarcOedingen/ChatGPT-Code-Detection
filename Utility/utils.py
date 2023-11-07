@@ -5,6 +5,8 @@ import pandas as pd
 from keras import Sequential
 from keras.layers import Dense
 import matplotlib.pyplot as plt
+from Data_Preprocessing.tokenization import Tokenizer
+from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics import accuracy_score, precision_score, recall_score
 
 
@@ -84,7 +86,7 @@ def extract_complex_whitespaces(code):
     return count_space / ratio if ratio > 0 else 0
 
 
-def train_Classifier(X_train, y_train, X_test, y_test, classifiers):
+def _train_Classifier(X_train, y_train, X_test, y_test, classifiers):
     metrics = np.zeros((len(classifiers), 3))
     for i in range(len(classifiers)):
         classifiers[i].fit(X_train, y_train)
@@ -127,3 +129,14 @@ def _evaluate_model(y_test, y_pred):
             recall_score(y_test, y_pred),
         ]
     )
+
+
+def _compute_log_likelihood(x, gmm):
+    return gmm.score_samples(x.reshape(1, -1)).sum()
+
+
+def _tfidf(corpus):
+    tokenizer = Tokenizer()
+    vectorizer = TfidfVectorizer(analyzer=lambda x: x, max_features=512)
+    tokenized_corpus = [tokenizer._tokenize(code) for code in corpus]
+    return vectorizer.fit_transform(tokenized_corpus).toarray()

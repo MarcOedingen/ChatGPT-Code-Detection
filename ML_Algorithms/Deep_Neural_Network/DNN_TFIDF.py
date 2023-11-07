@@ -1,16 +1,6 @@
 import numpy as np
 import Utility.utils as utils
 from sklearn.model_selection import train_test_split
-from Data_Preprocessing.tokenization import Tokenizer
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics import accuracy_score, precision_score, recall_score
-
-
-def _tfidf(corpus):
-    tokenizer = Tokenizer()
-    vectorizer = TfidfVectorizer(analyzer=lambda x: x, max_features=512)
-    tokenized_corpus = [tokenizer._tokenize(code) for code in corpus]
-    return vectorizer.fit_transform(tokenized_corpus).toarray()
 
 
 def main():
@@ -21,7 +11,7 @@ def main():
     human_code = code_data[~code_data["is_gpt"]]["code"].values
     assert ai_code.shape[0] == human_code.shape[0]
 
-    X = _tfidf(np.concatenate((ai_code, human_code), axis=0))
+    X = utils._tfidf(np.concatenate((ai_code, human_code), axis=0))
     Y = np.concatenate(
         (np.ones(ai_code.shape[0]), np.zeros(human_code.shape[0])), axis=0
     ).astype("float32")

@@ -32,16 +32,3 @@ class Tokenizer:
 
     def _tokenize(self, code):
         return self._encode(code)
-
-
-def main():
-    file_path = "Final_Datasets/Paired_Embedded_Cleaned"
-    code_data = utils.load_data(file_path=file_path)
-
-    tokenizer = Tokenizer()
-    code_data["tokens"] = code_data["code"].apply(tokenizer._tokenize)
-    code_data["num_tokens"] = code_data["tokens"].apply(len)
-    utils.save_data(code_data, "Final_Datasets/Paired_Embedded_Cleaned_Tokenized")
-
-
-main()

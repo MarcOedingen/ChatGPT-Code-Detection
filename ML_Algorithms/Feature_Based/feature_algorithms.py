@@ -120,7 +120,7 @@ def main():
         AdaBoostClassifier(),
         XGBClassifier(),
     ]
-    metrics = utils.train_Classifier(X_train, Y_train, X_test, Y_test, classifiers)
+    metrics = utils._train_Classifier(X_train, Y_train, X_test, Y_test, classifiers)
 
     neural_network = utils._build_model(input_dim=X.shape[1])
     utils._fit_model(neural_network, X_train, Y_train, X_test, Y_test)
