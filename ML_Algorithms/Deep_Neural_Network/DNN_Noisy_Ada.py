@@ -4,6 +4,7 @@ import Utility.utils as utils
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, precision_score, recall_score
 
+
 def objective(trial, mean_X, cov_X, Y, mean_performance):
     alpha = trial.suggest_float("alpha", 0.0, 100.0)
     X = np.random.multivariate_normal(mean_X, alpha * cov_X, size=Y.shape[0])
@@ -20,7 +21,10 @@ def objective(trial, mean_X, cov_X, Y, mean_performance):
     recall = recall_score(YTest, y_pred)
 
     alpha_weight = 1e-4
-    return np.mean([accuracy, precision, recall]) - mean_performance + alpha * alpha_weight
+    return (
+        np.mean([accuracy, precision, recall]) - mean_performance + alpha * alpha_weight
+    )
+
 
 def main():
     file_path = "Final_Datasets/Paired_Embedded_Cleaned"
@@ -46,16 +50,31 @@ def main():
         utils._fit_model(neural_network, XTrain, YTrain, XTest, YTest)
         y_pred = neural_network.predict(XTest)
         y_pred = np.where(y_pred >= 0.5, 1, 0)
-        performance[i] = np.mean([accuracy_score(YTest, y_pred), precision_score(YTest, y_pred), recall_score(YTest, y_pred)])
+        performance[i] = np.mean(
+            [
+                accuracy_score(YTest, y_pred),
+                precision_score(YTest, y_pred),
+                recall_score(YTest, y_pred),
+            ]
+        )
 
     mean_performance = np.mean(performance)
 
-    AI_X = X[Y==1]
+    AI_X = X[Y == 1]
     mean_AI_X = np.mean(AI_X, axis=0)
     cov_AI_X = np.cov(AI_X, rowvar=False)
 
     study = optuna.create_study(direction="maximize")
-    study.optimize(lambda trial: objective(trial, mean_X=mean_AI_X, cov_X=cov_AI_X, Y=Y, mean_performance=mean_performance), n_trials=100)
+    study.optimize(
+        lambda trial: objective(
+            trial,
+            mean_X=mean_AI_X,
+            cov_X=cov_AI_X,
+            Y=Y,
+            mean_performance=mean_performance,
+        ),
+        n_trials=100,
+    )
     best_alpha = study.best_params["alpha"]
     print(f"Best alpha: {best_alpha}")
 
@@ -69,5 +88,6 @@ def main():
     y_pred = np.where(y_pred >= 0.5, 1, 0)
     metrics = utils._evaluate_model(YTest, y_pred)
     print(metrics)
+
 
 main()

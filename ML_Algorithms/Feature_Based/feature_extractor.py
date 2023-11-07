@@ -3,6 +3,7 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 
+
 class FeatureExtractor:
     def __init__(self):
         self._feature_names = [
@@ -42,4 +43,3 @@ class FeatureExtractor:
             plt.show()
         if save:
             plt.savefig("Plots/correlation_matrix.pdf")
-

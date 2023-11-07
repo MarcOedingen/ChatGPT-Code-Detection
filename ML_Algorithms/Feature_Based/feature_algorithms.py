@@ -7,7 +7,13 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
 from ML_Algorithms.Feature_Based.feature_extractor import FeatureExtractor
-from sklearn.ensemble import RandomForestClassifier, BaggingClassifier, GradientBoostingClassifier, AdaBoostClassifier
+from sklearn.ensemble import (
+    RandomForestClassifier,
+    BaggingClassifier,
+    GradientBoostingClassifier,
+    AdaBoostClassifier,
+)
+
 
 def main():
     file_path = "Final_Datasets/Paired_Embedded_Cleaned"
@@ -38,11 +44,19 @@ def main():
     max_line_length_ai = ai_code.apply(utils.extract_max_line_length)
     max_line_length_human = human_code.apply(utils.extract_max_line_length)
 
-    number_of_trailing_whitespaces_ai = ai_code.apply(utils.extract_number_of_trailing_whitespaces)
-    number_of_trailing_whitespaces_human = human_code.apply(utils.extract_number_of_trailing_whitespaces)
+    number_of_trailing_whitespaces_ai = ai_code.apply(
+        utils.extract_number_of_trailing_whitespaces
+    )
+    number_of_trailing_whitespaces_human = human_code.apply(
+        utils.extract_number_of_trailing_whitespaces
+    )
 
-    number_of_leading_whitespaces_ai = ai_code.apply(utils.extract_number_of_leading_whitespaces)
-    number_of_leading_whitespaces_human = human_code.apply(utils.extract_number_of_leading_whitespaces)
+    number_of_leading_whitespaces_ai = ai_code.apply(
+        utils.extract_number_of_leading_whitespaces
+    )
+    number_of_leading_whitespaces_human = human_code.apply(
+        utils.extract_number_of_leading_whitespaces
+    )
 
     complex_whitespaces_ai = ai_code.apply(utils.extract_complex_whitespaces)
     complex_whitespaces_human = human_code.apply(utils.extract_complex_whitespaces)
@@ -61,19 +75,24 @@ def main():
         ]
     ).T
 
-    X = np.concatenate((X, np.array(
-        [
-            tabs_human,
-            empty_lines_human,
-            inline_whitespace_human,
-            punctuation_human,
-            length_of_lines_human,
-            max_line_length_human,
-            number_of_trailing_whitespaces_human,
-            number_of_leading_whitespaces_human,
-            complex_whitespaces_human,
-        ]
-    ).T))
+    X = np.concatenate(
+        (
+            X,
+            np.array(
+                [
+                    tabs_human,
+                    empty_lines_human,
+                    inline_whitespace_human,
+                    punctuation_human,
+                    length_of_lines_human,
+                    max_line_length_human,
+                    number_of_trailing_whitespaces_human,
+                    number_of_leading_whitespaces_human,
+                    complex_whitespaces_human,
+                ]
+            ).T,
+        )
+    )
 
     Y = np.array([1] * ai_code.shape[0] + [0] * human_code.shape[0])
 
@@ -89,7 +108,9 @@ def main():
         "OPCTs",
     ]
 
-    X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2, random_state=42)
+    X_train, X_test, Y_train, Y_test = train_test_split(
+        X, Y, test_size=0.2, random_state=42
+    )
     classifiers = [
         LogisticRegression(),
         DecisionTreeClassifier(),
@@ -105,7 +126,9 @@ def main():
     utils._fit_model(neural_network, X_train, Y_train, X_test, Y_test)
     y_pred = neural_network.predict(X_test)
     y_pred = np.where(y_pred >= 0.5, 1, 0)
-    metrics = np.concatenate((metrics, utils._evaluate_model(Y_test, y_pred).reshape(1, 3)))
+    metrics = np.concatenate(
+        (metrics, utils._evaluate_model(Y_test, y_pred).reshape(1, 3))
+    )
 
     n_opcts = 10
     best_performance = np.zeros((3))
@@ -119,9 +142,9 @@ def main():
 
     print("Accuracy\tPrecision\tRecall")
     for i in range(len(models)):
-        print(f"{models[i]}\t{np.round(metrics[i][0], 3)}\t\t{np.round(metrics[i][1], 2)}\t\t{np.round(metrics[i][2], 2)}")
-
-
+        print(
+            f"{models[i]}\t{np.round(metrics[i][0], 3)}\t\t{np.round(metrics[i][1], 2)}\t\t{np.round(metrics[i][2], 2)}"
+        )
 
 
 main()

@@ -3,6 +3,7 @@ import Utility.utils as utils
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, precision_score, recall_score
 
+
 def main():
     file_path = "Final_Datasets/Paired_Embedded_Cleaned"
     code_data = utils.load_data(file_path=file_path)

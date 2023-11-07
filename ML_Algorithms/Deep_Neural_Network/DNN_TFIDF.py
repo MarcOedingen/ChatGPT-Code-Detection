@@ -5,11 +5,13 @@ from Data_Preprocessing.tokenization import Tokenizer
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics import accuracy_score, precision_score, recall_score
 
+
 def _tfidf(corpus):
     tokenizer = Tokenizer()
     vectorizer = TfidfVectorizer(analyzer=lambda x: x, max_features=512)
     tokenized_corpus = [tokenizer._tokenize(code) for code in corpus]
     return vectorizer.fit_transform(tokenized_corpus).toarray()
+
 
 def main():
     file_path = "Final_Datasets/Paired_Embedded_Cleaned"
