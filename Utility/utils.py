@@ -135,6 +135,12 @@ def _compute_log_likelihood(x, gmm):
     return gmm.score_samples(x.reshape(1, -1)).sum()
 
 
+def _compute_log_likelihood_token(x, gmm, model):
+    code_vec = [model.wv[word] for word in x if word in model.wv]
+    code_vec_array = np.vstack(code_vec)
+    return gmm.score_samples(code_vec_array).sum()
+
+
 def _tfidf(corpus):
     tokenizer = Tokenizer()
     vectorizer = TfidfVectorizer(analyzer=lambda x: x, max_features=512)
