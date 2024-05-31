@@ -246,10 +246,10 @@ def _tokenize(corpus):
 
 # Cluster sampling
 def _split_on_problems(X, seed, test_size=0.2):
-    unique_problems = X["task_id"].unique()
+    unique_problems = X["id"].unique()
     X_Train, X_Test = train_test_split(
         unique_problems, test_size=test_size, random_state=seed
     )
-    X_train = X[X["task_id"].isin(X_Train)]
-    X_test = X[X["task_id"].isin(X_Test)]
+    X_train = X[X["id"].isin(X_Train)]
+    X_test = X[X["id"].isin(X_Test)]
     return X_train, X_test
