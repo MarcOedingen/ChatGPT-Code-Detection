@@ -3,9 +3,9 @@ import Utility.utils as utils
 from gensim.models import Word2Vec
 
 def train_eval_model(X_train, X_test, y_train, y_test, y_test_emb, separators):
-    neural_network = utils._build_DNN(input_dim=X_train.shape[1])
+    DNN = utils._build_DNN(input_dim=X_train.shape[1])
     utils._fit_model(
-        model=neural_network,
+        model=DNN,
         X_train=X_train,
         y_train=y_train,
         X_test=X_test,
@@ -16,7 +16,7 @@ def train_eval_model(X_train, X_test, y_train, y_test, y_test_emb, separators):
     for i in range(len(separators)):
         X_test_split = X_test[start_index : start_index + separators[i]]
         start_index += separators[i]
-        y_prob[i] = np.mean(neural_network.predict(X_test_split))
+        y_prob[i] = np.mean(DNN.predict(X_test_split))
     y_pred = np.where(y_prob >= 0.5, 1, 0)
     y_test = np.where(y_test == True, 1, 0)
     utils.save_results(y_test=y_test, y_pred=y_pred, y_prob=y_prob, file_name="DNN_Word2Vec")

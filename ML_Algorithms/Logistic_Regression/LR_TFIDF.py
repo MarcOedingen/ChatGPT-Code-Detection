@@ -3,10 +3,10 @@ from sklearn.linear_model import LogisticRegression
 
 
 def train_eval_model(X_train, X_test, y_train, y_test):
-    random_forest = LogisticRegression()
-    random_forest.fit(X_train, y_train)
-    y_pred = random_forest.predict(X_test)
-    y_prob = random_forest.predict_proba(X_test)[:, 1]
+    LR = LogisticRegression()
+    LR.fit(X_train, y_train)
+    y_pred = LR.predict(X_test)
+    y_prob = LR.predict_proba(X_test)[:, 1]
     utils.save_results(y_test=y_test, y_pred=y_pred, y_prob=y_prob, file_name="LR_TFIDF")
     utils.save_probas(y_test=y_test, y_prob=y_prob, file_name="LR_TFIDF")
     utils.print_pretty_results(index_start=-1, file_name="LR_TFIDF")
