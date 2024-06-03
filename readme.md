@@ -25,20 +25,24 @@ Looking forward to further data sources:
 
 ### Dataset Description
 The dataset consists of four relevant columns:
-- `id`: The unique identifier of the code snippet, which is a combination of the source and the task ID of the code snippet from its original source.
+- `id`: The unique identifier of the code snippet, which is a combination of the source and the task id of the code snippet from its original source.
 - `source`: The source of the code snippet.
 - `code`: The Python code snippet.
 - `label`: The label of the code snippet, which is `1` if the code snippet is GPT-generated and `0` if the code snippet is human-written.
+- `embedding`: The 'Ada' embedding of the code snippet.
 
 In total, the dataset contains 40158 code snippets with 20079 GPT-generated and 20079 human-written code snippets. 
 The dataset is balanced, meaning that the number of GPT-generated code snippets and human-written code snippets is equal for each `id`.
 In our paper, we used a more strict filtering of duplicates of the code snippets, which resulted in a dataset of 31448 code snippets.  
 
 
-Download the dataset with more samples from [here](https://drive.google.com/drive/folders/1) and place it in the `Dataset` folder to use it for the experiments.
+Download the dataset without embeddings from [here](https://th-koeln.sciebo.de/s/XZRR45yzO0rRuj3) and with embeddings from [here](https://th-koeln.sciebo.de/s/5kh6qOhEcO5ueFV).
+Unzip the downloaded file and place it in the `Dataset` folder to use it for the experiments.
 
 ## Structure of the Project
 ```
+├── Bayes_Classifier
+│   ├── bayes_class.py
 ├── ML_Algorithms
 │   ├── Decision_Tree
 │   │   ├── DT_Ada.py
@@ -66,10 +70,17 @@ Download the dataset with more samples from [here](https://drive.google.com/driv
 │   ├── eXtreme_Gradient_Boosting
 │   │   ├── XGB_Ada.py
 │   │   ├── XGB_TFIDF.py
-├── Dataset
-│   ├── Balanced Embedded Dataset
-├── main.py
+├── Datasets
+│   ├── Unformatted_Balanced.jsonl
+│   ├── Unformatted_Balanced_Embedded.jsonl
 ├── Utility
+│   ├── utils.py
+├── Models
+│   ├── DNN_Ada.pkl
+│   ├── XGB_TFIDF.pkl
+│   ├── Vectorizer_TFIDF.pkl
+├── Results
+├── main.py
 ├── requirements.txt
 ├── README.md
 ```
