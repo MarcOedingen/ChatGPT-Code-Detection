@@ -1,7 +1,18 @@
+import os
 import argparse
+
+def check_experiment_preconditions():
+    if not os.path.exists("Results"):
+        os.makedirs("Results")
+    if not os.path.exists("Datasets"):
+        os.makedirs("Datasets")
+    if not os.listdir("Datasets"):
+        print("No dataset found. Please download the dataset from https://drive.google.com/drive/folders/1")
+        exit(1)
 
 
 def main():
+    check_experiment_preconditions()
     parser = argparse.ArgumentParser(description="Run the ML algorithms on the dataset")
     parser.add_argument(
         "--dataset",
@@ -53,10 +64,6 @@ def main():
             from ML_Algorithms.Logistic_Regression.LR_Ada import run
 
             run(dataset=args.dataset, seed=args.seed)
-        elif args.algorithm == "GB":
-            from ML_Algorithms.Gradient_Boosting.GB_Ada import run
-
-            run(dataset=args.dataset, seed=args.seed)
         elif args.algorithm == "DT":
             from ML_Algorithms.Decision_Tree.DT_Ada import run
 
@@ -84,10 +91,6 @@ def main():
             run(dataset=args.dataset, seed=args.seed)
         elif args.algorithm == "LR":
             from ML_Algorithms.Logistic_Regression.LR_TFIDF import run
-
-            run(dataset=args.dataset, seed=args.seed)
-        elif args.algorithm == "GB":
-            from ML_Algorithms.Gradient_Boosting.GB_TFIDF import run
 
             run(dataset=args.dataset, seed=args.seed)
         elif args.algorithm == "DT":
