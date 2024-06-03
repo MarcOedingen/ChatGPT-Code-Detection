@@ -1,7 +1,6 @@
 import numpy as np
 from sklearn import mixture
 import Utility.utils as utils
-from sklearn.model_selection import train_test_split
 
 
 def train_eval_model(X_AI_train, X_human_train, X_test, y_test):
@@ -39,47 +38,25 @@ def run_on_problems(code_data, seed):
         X=code_data, seed=seed, test_size=0.2
     )
 
-    ai_code = X_train_com[X_train_com["is_gpt"]]["code"].values
-    human_code = X_train_com[~X_train_com["is_gpt"]]["code"].values
+    ai_code = X_train_com[X_train_com["label"] == 1]["code"].values
+    human_code = X_train_com[X_train_com["label"] == 0]["code"].values
     assert ai_code.shape[0] == human_code.shape[0]
 
     X_train, X_train_emb = utils._tfidf(
         np.concatenate((ai_code, human_code)), max_features=1536
     )
     X_AI_train = X_train[: len(ai_code)]
-    X_human_train = X_train[len(ai_code) :]
+    X_human_train = X_train[len(ai_code):]
 
     X_test = X_train_emb.transform(utils._tokenize(X_test_com["code"].values)).toarray()
-    y_test = X_test_com["is_gpt"].values
+    y_test = X_test_com["label"].values
 
     train_eval_model(
         X_AI_train=X_AI_train, X_human_train=X_human_train, X_test=X_test, y_test=y_test
     )
 
 
-def run_on_random(code_data, seed):
-    ai_code = code_data[code_data["is_gpt"]]["code"].values
-    human_code = code_data[~code_data["is_gpt"]]["code"].values
-    assert ai_code.shape[0] == human_code.shape[0]
-
-    X_AI_train, X_AI_test = train_test_split(
-        utils._tfidf(ai_code, max_features=1536)[0], test_size=0.2, random_state=seed
-    )
-    X_human_train, X_human_test = train_test_split(
-        utils._tfidf(human_code, max_features=1536)[0], test_size=0.2, random_state=seed
-    )
-    X_test = np.concatenate((X_AI_test, X_human_test))
-    y_test = np.concatenate((np.ones(len(X_AI_test)), np.zeros(len(X_human_test))))
-
-    train_eval_model(
-        X_AI_train=X_AI_train, X_human_train=X_human_train, X_test=X_test, y_test=y_test
-    )
-
-
-def run(dataset, split, seed):
-    file_path = f"Final_Datasets/{dataset}_Balanced_Embedded"
+def run(dataset, seed):
+    file_path = f"Datasets/{dataset}_Balanced_Embedded"
     code_data = utils.load_data(file_path=file_path)
-    if split == "random":
-        run_on_random(code_data=code_data, seed=seed)
-    elif split == "problems":
-        run_on_problems(code_data=code_data, seed=seed)
+    run_on_problems(code_data=code_data, seed=seed)

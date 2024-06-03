@@ -1,3 +1,4 @@
+import re
 import numpy as np
 import pandas as pd
 import seaborn as sns
@@ -7,19 +8,51 @@ import matplotlib.pyplot as plt
 class FeatureExtractor:
     def __init__(self):
         self._feature_names = [
-            "number_of_tabs",
+            "number_of_leading_whitespaces",
             "number_of_empty_lines",
             "number_of_inline_whitespace",
             "number_of_punctuation",
-            "length_of_lines",
             "max_line_length",
             "number_of_trailing_whitespaces",
-            "number_of_leading_whitespaces",
-            "complex_whitespaces",
+            "number_of_lines_with_leading_whitespace",
         ]
 
     def _get_feature_names(self):
         return self._feature_names
+
+    def number_of_leading_whitespaces(self, code):
+        count = 0
+        for line in code.split("\n"):
+            count += len(line) - len(line.lstrip())
+        return count / len(code)
+
+    def number_of_empty_lines(self, code):
+        return len([line for line in code.split("\n") if line == ""]) / len(
+            code.split("\n")
+        )
+
+    def number_of_inline_whitespace(self, code):
+        lines = code.split("\n")
+        count = 0
+        for line in lines:
+            count += line.lstrip().count(" ")
+        return count / len(code)
+
+    def number_of_punctuation(self, code):
+        return len(re.findall(r"[^\w\s]", code)) / len(code)
+
+    def max_line_length(self, code):
+        return np.max([len(line) for line in code.splitlines()]) / len(code)
+
+    def number_of_trailing_whitespaces(self, code):
+        return len([line for line in code.split("\n") if line.endswith(" ")]) / len(
+            code.split("\n")
+        )
+
+    def number_of_leading_whitespaces_lines(self, code):
+        return len([line for line in code.split("\n") if line.startswith(" ")]) / len(
+            code.split("\n")
+        )
 
     def _plot_corrMatrix(self, features, feature_names, show=False, save=False):
         df = pd.DataFrame(features, columns=feature_names)

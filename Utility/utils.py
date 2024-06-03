@@ -21,58 +21,6 @@ def save_data(data, file_name):
     data.to_json(f"{file_name}.jsonl", orient="records", lines=True)
 
 
-def extract_number_of_tabs(code):
-    count = 0
-    for line in code.split("\n"):
-        count += len(line) - len(line.lstrip())
-    return count / len(code)
-
-
-def number_of_inline_whitespace(code):
-    lines = code.split("\n")
-    count = 0
-    for line in lines:
-        count += line.lstrip().count(" ")
-    return count / len(code)
-
-
-def extract_number_of_empty_lines(code):
-    return len([line for line in code.split("\n") if line == ""]) / len(
-        code.split("\n")
-    )
-
-
-def number_of_punctuation(code):
-    return len(re.findall(r"[^\w\s]", code)) / len(code)
-
-
-def extract_length_of_lines(code):
-    return np.sum([len(line) for line in code.splitlines()]) / len(code)
-
-
-def extract_max_line_length(code):
-    return np.max([len(line) for line in code.splitlines()]) / len(code)
-
-
-def extract_number_of_trailing_whitespaces(code):
-    return len([line for line in code.split("\n") if line.endswith(" ")]) / len(
-        code.split("\n")
-    )
-
-
-def extract_number_of_leading_whitespaces(code):
-    return len([line for line in code.split("\n") if line.startswith(" ")]) / len(
-        code.split("\n")
-    )
-
-
-def extract_complex_whitespaces(code):
-    count_space = code.count(" ")
-    count_tab = extract_number_of_tabs(code)
-    ratio = count_space + count_tab
-    return count_space / ratio if ratio > 0 else 0
-
-
 def _train_Classifier(X_train, y_train, X_test, y_test, classifiers):
     metrics = np.zeros((len(classifiers), 5))
     y_probs = np.zeros((len(classifiers), len(y_test)))
@@ -239,7 +187,7 @@ def _tfidf(corpus, max_features=1536):
 
 
 def _tokenize(corpus):
-    tokenizer = tiktoken.encoding_for_model("cl100k_base")
+    tokenizer = tiktoken.get_encoding("cl100k_base")
     tokenized_corpus = [tokenizer.encode(code) for code in corpus]
     return tokenized_corpus
 

@@ -2,7 +2,6 @@ import numpy as np
 from sklearn import mixture
 import Utility.utils as utils
 from gensim.models import Word2Vec
-from sklearn.model_selection import train_test_split
 
 
 def train_eval_model(X_AI_train, X_human_train, X_test, y_test, model):
@@ -45,18 +44,18 @@ def run_on_problems(code_data, seed):
         X=code_data, seed=seed, test_size=0.2
     )
 
-    ai_code = X_train_com[X_train_com["is_gpt"]]["code"].values
-    human_code = X_train_com[~X_train_com["is_gpt"]]["code"].values
+    ai_code = X_train_com[X_train_com["label"] == 1]["code"].values
+    human_code = X_train_com[X_train_com["label"] == 0]["code"].values
     assert ai_code.shape[0] == human_code.shape[0]
 
     X_train_ai_tokens = utils._tokenize(corpus=ai_code)
     X_train_human_tokens = utils._tokenize(corpus=human_code)
 
     X_test = utils._tokenize(corpus=X_test_com["code"].values)
-    y_test = X_test_com["is_gpt"].values
+    y_test = X_test_com["label"].values
 
     vector_size = 1536
-    window = 5
+    window = 1
     model = Word2Vec(
         sentences=X_train_ai_tokens + X_train_human_tokens,
         vector_size=vector_size,
@@ -87,53 +86,7 @@ def run_on_problems(code_data, seed):
     )
 
 
-def run_on_random(code_data, seed):
-    ai_code = code_data[code_data["is_gpt"]]["code"]
-    human_code = code_data[~code_data["is_gpt"]]["code"]
-    assert ai_code.shape[0] == human_code.shape[0]
-
-    ai_code_tokens = utils._tokenize(corpus=ai_code)
-    human_code_tokens = utils._tokenize(corpus=human_code)
-
-    X_AI_train, X_AI_test = train_test_split(
-        ai_code_tokens, test_size=0.2, random_state=seed
-    )
-    X_human_train, X_human_test = train_test_split(
-        human_code_tokens, test_size=0.2, random_state=seed
-    )
-    X_test = np.concatenate((X_AI_test, X_human_test))
-    y_test = np.concatenate((np.ones(len(X_AI_test)), np.zeros(len(X_human_test))))
-
-    vector_size = 768
-    window = 1
-    model = Word2Vec(
-        sentences=np.concatenate((X_AI_train, X_human_train)).tolist(),
-        vector_size=vector_size,
-        window=window,
-        min_count=1,
-        workers=8,
-    )
-
-    ai_code_vecs = [
-        model.wv[word] for code in X_AI_train for word in code if word in model.wv
-    ]
-    human_code_vecs = [
-        model.wv[word] for code in X_human_train for word in code if word in model.wv
-    ]
-
-    train_eval_model(
-        X_AI_train=ai_code_vecs,
-        X_human_train=human_code_vecs,
-        X_test=X_test,
-        y_test=y_test,
-        model=model,
-    )
-
-
-def run(dataset, split, seed):
-    file_path = f"Final_Datasets/{dataset}_Balanced_Embedded"
+def run(dataset, seed):
+    file_path = f"Datasets/{dataset}_Balanced_Embedded"
     code_data = utils.load_data(file_path=file_path)
-    if split == "random":
-        run_on_random(code_data=code_data, seed=seed)
-    elif split == "problems":
-        run_on_problems(code_data=code_data, seed=seed)
+    run_on_problems(code_data=code_data, seed=seed)

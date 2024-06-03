@@ -18,15 +18,15 @@ def run_on_problems(code_data, seed):
         X=code_data, seed=seed, test_size=0.2
     )
 
-    y_train = X_train_com["is_gpt"].values
-    y_test = X_test_com["is_gpt"].values
+    y_train = X_train_com["label"].values
+    y_test = X_test_com["label"].values
 
     X_train = np.stack(X_train_com["embedding"].values)
     X_test = np.stack(X_test_com["embedding"].values)
 
     train_eval_model(X_train=X_train, X_test=X_test, y_train=y_train, y_test=y_test)
 
-def run(dataset, split, seed):
-    file_path = f"Final_Datasets/{dataset}_Balanced_Embedded"
+def run(dataset, seed):
+    file_path = f"Datasets/{dataset}_Balanced_Embedded"
     code_data = utils.load_data(file_path=file_path)
     run_on_problems(code_data=code_data, seed=seed)
