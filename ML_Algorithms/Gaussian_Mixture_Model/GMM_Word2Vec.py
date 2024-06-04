@@ -34,7 +34,9 @@ def train_eval_model(X_AI_train, X_human_train, X_test, y_test, model):
     y_prob = np.apply_along_axis(utils.softmax, 1, logits)[:, 0]
     y_pred = np.where(y_prob >= 0.5, 1, 0)
     y_test = np.where(y_test == True, 1, 0)
-    utils.save_results(y_test=y_test, y_pred=y_pred, y_prob=y_prob, file_name="GMM_Word2Vec")
+    utils.save_results(
+        y_test=y_test, y_pred=y_pred, y_prob=y_prob, file_name="GMM_Word2Vec"
+    )
     utils.save_probas(y_test=y_test, y_prob=y_prob, file_name="GMM_Word2Vec")
     utils.print_pretty_results(index_start=-1, file_name="GMM_Word2Vec")
 

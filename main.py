@@ -1,16 +1,20 @@
 import os
 import argparse
 
+
 def check_experiment_preconditions():
     if not os.path.exists("Results"):
         os.makedirs("Results")
     if not os.path.exists("Datasets"):
         os.makedirs("Datasets")
     if not os.listdir("Datasets"):
-        print("No dataset found. Please download the code dataset from https://th-koeln.sciebo.de/s/XZRR45yzO0rRuj3 or "
-              "with the embeddings from https://th-koeln.sciebo.de/s/5kh6qOhEcO5ueFV and place the unzipped dataset in "
-              "the Datasets folder.")
+        print(
+            "No dataset found. Please download the code dataset from https://th-koeln.sciebo.de/s/XZRR45yzO0rRuj3 or "
+            "with the embeddings from https://th-koeln.sciebo.de/s/5kh6qOhEcO5ueFV and place the unzipped dataset in "
+            "the Datasets folder."
+        )
         exit(1)
+
 
 def main():
     check_experiment_preconditions()
@@ -36,12 +40,7 @@ def main():
         choices=["bayes", "DNN", "DT", "features", "GMM", "LR", "OPCT", "RF", "XGB"],
         default="XGB",
     )
-    parser.add_argument(
-        "--seed",
-        type=int,
-        help="The seed to use",
-        default=42
-    )
+    parser.add_argument("--seed", type=int, help="The seed to use", default=42)
 
     args = parser.parse_args()
     if args.algorithm == "features":

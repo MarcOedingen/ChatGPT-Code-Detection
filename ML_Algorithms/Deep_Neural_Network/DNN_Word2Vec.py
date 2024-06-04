@@ -2,6 +2,7 @@ import numpy as np
 import Utility.utils as utils
 from gensim.models import Word2Vec
 
+
 def train_eval_model(X_train, X_test, y_train, y_test, y_test_emb, separators):
     DNN = utils._build_DNN(input_dim=X_train.shape[1])
     utils._fit_model(
@@ -19,7 +20,9 @@ def train_eval_model(X_train, X_test, y_train, y_test, y_test_emb, separators):
         y_prob[i] = np.mean(DNN.predict(X_test_split))
     y_pred = np.where(y_prob >= 0.5, 1, 0)
     y_test = np.where(y_test == True, 1, 0)
-    utils.save_results(y_test=y_test, y_pred=y_pred, y_prob=y_prob, file_name="DNN_Word2Vec")
+    utils.save_results(
+        y_test=y_test, y_pred=y_pred, y_prob=y_prob, file_name="DNN_Word2Vec"
+    )
     utils.save_probas(y_test=y_test, y_prob=y_prob, file_name="DNN_Word2Vec")
     utils.print_pretty_results(index_start=-1, file_name="DNN_Word2Vec")
 
@@ -49,8 +52,16 @@ def run_on_problems(code_data, seed):
         workers=8,
     )
 
-    X_train_emb = [model.wv[word] if word in model.wv else np.zeros(vector_size) for code in X_train for word in code]
-    X_test_emb = [model.wv[word] if word in model.wv else np.zeros(vector_size) for code in X_test for word in code]
+    X_train_emb = [
+        model.wv[word] if word in model.wv else np.zeros(vector_size)
+        for code in X_train
+        for word in code
+    ]
+    X_test_emb = [
+        model.wv[word] if word in model.wv else np.zeros(vector_size)
+        for code in X_test
+        for word in code
+    ]
 
     y_train = np.repeat(y_train, [len(code) for code in X_train])
     y_test_emb = np.repeat(y_test, [len(code) for code in X_test])
@@ -61,8 +72,9 @@ def run_on_problems(code_data, seed):
         y_train=y_train,
         y_test=y_test,
         y_test_emb=y_test_emb,
-        separators=[len(tokens) for tokens in X_test]
+        separators=[len(tokens) for tokens in X_test],
     )
+
 
 def run(dataset, seed):
     file_path = f"Datasets/{dataset}_Balanced_Embedded"

@@ -1,6 +1,7 @@
 import numpy as np
 import Utility.utils as utils
 
+
 def train_eval_model(X_train, X_test, y_train, y_test):
     DNN = utils._build_DNN(input_dim=X_train.shape[1])
     utils._fit_model(
@@ -13,7 +14,9 @@ def train_eval_model(X_train, X_test, y_train, y_test):
     y_prob = np.squeeze(DNN.predict(X_test))
     y_pred = np.where(y_prob >= 0.5, 1, 0)
     y_test = np.where(y_test == True, 1, 0)
-    utils.save_results(y_test=y_test, y_pred=y_pred, y_prob=y_prob, file_name="DNN_TFIDF")
+    utils.save_results(
+        y_test=y_test, y_pred=y_pred, y_prob=y_prob, file_name="DNN_TFIDF"
+    )
     utils.save_probas(y_test=y_test, y_prob=y_prob, file_name="DNN_TFIDF")
     utils.print_pretty_results(index_start=-1, file_name="DNN_TFIDF")
 

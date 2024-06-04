@@ -25,9 +25,7 @@ def extract_features(ai_code, human_code):
         featureExtractor.number_of_leading_whitespaces
     )
 
-    number_of_empty_lines_ai = ai_code.apply(
-        featureExtractor.number_of_empty_lines
-    )
+    number_of_empty_lines_ai = ai_code.apply(featureExtractor.number_of_empty_lines)
     number_of_empty_lines_human = human_code.apply(
         featureExtractor.number_of_empty_lines
     )
@@ -39,19 +37,13 @@ def extract_features(ai_code, human_code):
         featureExtractor.number_of_inline_whitespace
     )
 
-    number_of_punctuation_ai = ai_code.apply(
-        featureExtractor.number_of_punctuation
-    )
+    number_of_punctuation_ai = ai_code.apply(featureExtractor.number_of_punctuation)
     number_of_punctuation_human = human_code.apply(
         featureExtractor.number_of_punctuation
     )
 
-    max_line_length_ai = ai_code.apply(
-        featureExtractor.max_line_length
-    )
-    max_line_length_human = human_code.apply(
-        featureExtractor.max_line_length
-    )
+    max_line_length_ai = ai_code.apply(featureExtractor.max_line_length)
+    max_line_length_human = human_code.apply(featureExtractor.max_line_length)
 
     number_of_trailing_whitespaces_ai = ai_code.apply(
         featureExtractor.number_of_trailing_whitespaces
@@ -131,7 +123,12 @@ def train_eval_model(X_train, y_train, X_test, y_test):
     y_pred = np.where(y_pred >= 0.5, 1, 0)
     y_prob = neural_network.predict(X_test)
     metrics = np.concatenate(
-        (metrics, utils._evaluate_model(y_test=y_test, y_pred=y_pred, y_prob=y_prob).reshape(1, 5))
+        (
+            metrics,
+            utils._evaluate_model(y_test=y_test, y_pred=y_pred, y_prob=y_prob).reshape(
+                1, 5
+            ),
+        )
     )
     y_probs = np.concatenate((y_probs, y_prob.T))
 
@@ -143,10 +140,12 @@ def train_eval_model(X_train, y_train, X_test, y_test):
         opcts[i].fit(X_train, to_categorical(y_train))
         y_pred = np.argmax(opcts[i].predict(X_test), axis=1)
         y_prob = opcts[i].predict(X_test)[:, 1]
-        if np.mean(utils._evaluate_model(y_test=y_test, y_pred=y_pred, y_prob=y_prob)) > np.mean(
-                best_performance
-        ):
-            best_performance = utils._evaluate_model(y_test=y_test, y_pred=y_pred, y_prob=y_prob)
+        if np.mean(
+            utils._evaluate_model(y_test=y_test, y_pred=y_pred, y_prob=y_prob)
+        ) > np.mean(best_performance):
+            best_performance = utils._evaluate_model(
+                y_test=y_test, y_pred=y_pred, y_prob=y_prob
+            )
             best_prob = y_prob
     y_probs = np.concatenate((y_probs, best_prob.reshape(1, -1)))
     return np.concatenate((metrics, best_performance.reshape(1, 5))), y_probs

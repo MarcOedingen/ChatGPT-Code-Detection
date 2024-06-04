@@ -29,9 +29,12 @@ def train_eval_model(X_AI_train, X_human_train, X_test, y_test):
     y_prob = np.apply_along_axis(utils.softmax, 1, logits)[:, 0]
     y_pred = np.where(y_prob >= 0.5, 1, 0)
     y_test = np.where(y_test == True, 1, 0)
-    utils.save_results(y_test=y_test, y_pred=y_pred, y_prob=y_prob, file_name="GMM_TFIDF")
+    utils.save_results(
+        y_test=y_test, y_pred=y_pred, y_prob=y_prob, file_name="GMM_TFIDF"
+    )
     utils.save_probas(y_test=y_test, y_prob=y_prob, file_name="GMM_TFIDF")
     utils.print_pretty_results(index_start=-1, file_name="GMM_TFIDF")
+
 
 def run_on_problems(code_data, seed):
     X_train_com, X_test_com = utils._split_on_problems(
@@ -46,7 +49,7 @@ def run_on_problems(code_data, seed):
         np.concatenate((ai_code, human_code)), max_features=1536
     )
     X_AI_train = X_train[: len(ai_code)]
-    X_human_train = X_train[len(ai_code):]
+    X_human_train = X_train[len(ai_code) :]
 
     X_test = X_train_emb.transform(utils._tokenize(X_test_com["code"].values)).toarray()
     y_test = X_test_com["label"].values

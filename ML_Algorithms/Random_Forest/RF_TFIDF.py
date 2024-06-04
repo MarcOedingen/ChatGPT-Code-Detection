@@ -7,7 +7,9 @@ def train_eval_model(X_train, X_test, y_train, y_test):
     random_forest.fit(X_train, y_train)
     y_pred = random_forest.predict(X_test)
     y_prob = random_forest.predict_proba(X_test)[:, 1]
-    utils.save_results(y_test=y_test, y_pred=y_pred, y_prob=y_prob, file_name="RF_TFIDF")
+    utils.save_results(
+        y_test=y_test, y_pred=y_pred, y_prob=y_prob, file_name="RF_TFIDF"
+    )
     utils.save_probas(y_test=y_test, y_prob=y_prob, file_name="RF_TFIDF")
     utils.print_pretty_results(index_start=-1, file_name="RF_TFIDF")
 

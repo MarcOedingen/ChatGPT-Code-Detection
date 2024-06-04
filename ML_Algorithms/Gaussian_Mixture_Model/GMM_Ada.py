@@ -2,6 +2,7 @@ import numpy as np
 from sklearn import mixture
 import Utility.utils as utils
 
+
 def train_eval_model(X_AI_train, X_human_train, X_test, y_test):
     n_components = 1
     gmm_ai = mixture.GaussianMixture(

@@ -11,6 +11,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics import accuracy_score, precision_score, recall_score, roc_auc_score
 
+
 def load_data(file_path):
     with jsonlines.open(f"{file_path}.jsonl") as reader:
         data = list(reader)
@@ -32,8 +33,8 @@ def _train_Classifier(X_train, y_train, X_test, y_test, classifiers):
         metrics[i][0] = accuracy_score(y_test, y_pred)
         metrics[i][1] = precision_score(y_test, y_pred)
         metrics[i][2] = recall_score(y_test, y_pred)
-        metrics[i][3] = 2 * (metrics[i][1] * metrics[i][2]) / (
-                metrics[i][1] + metrics[i][2]
+        metrics[i][3] = (
+            2 * (metrics[i][1] * metrics[i][2]) / (metrics[i][1] + metrics[i][2])
         )
         metrics[i][4] = roc_auc_score(y_test, y_prob)
     return metrics, y_probs
@@ -157,10 +158,9 @@ def _evaluate_model(y_test, y_pred, y_prob):
             accuracy_score(y_test, y_pred),
             precision_score(y_test, y_pred),
             recall_score(y_test, y_pred),
-            2 * (precision_score(y_test, y_pred) * recall_score(y_test, y_pred))
-            / (
-                    precision_score(y_test, y_pred) + recall_score(y_test, y_pred)
-            ),
+            2
+            * (precision_score(y_test, y_pred) * recall_score(y_test, y_pred))
+            / (precision_score(y_test, y_pred) + recall_score(y_test, y_pred)),
             roc_auc_score(y_test, y_prob),
         ]
     )

@@ -14,15 +14,19 @@ def train_eval_model(X_train, X_test, y_train, y_test):
         opcts[i].fit(X_train, to_categorical(y_train))
         y_pred = np.argmax(opcts[i].predict(X_test), axis=1)
         y_prob = opcts[i].predict(X_test)[:, 1]
-        if np.mean(utils._evaluate_model(y_test=y_test, y_pred=y_pred, y_prob=y_prob)) > np.mean(
-                best_performance
-        ):
-            best_performance = utils._evaluate_model(y_test=y_test, y_pred=y_pred, y_prob=y_prob)
+        if np.mean(
+            utils._evaluate_model(y_test=y_test, y_pred=y_pred, y_prob=y_prob)
+        ) > np.mean(best_performance):
+            best_performance = utils._evaluate_model(
+                y_test=y_test, y_pred=y_pred, y_prob=y_prob
+            )
             best_prob = y_prob
             best_opct = opcts[i]
 
     y_pred = np.argmax(best_opct.predict(X_test), axis=1)
-    utils.save_results(y_test=y_test, y_pred=y_pred, y_prob=best_prob, file_name="OPCT_TFIDF")
+    utils.save_results(
+        y_test=y_test, y_pred=y_pred, y_prob=best_prob, file_name="OPCT_TFIDF"
+    )
     utils.save_probas(y_test=y_test, y_prob=best_prob, file_name="OPCT_TFIDF")
     utils.print_pretty_results(index_start=-1, file_name="OPCT_TFIDF")
 
