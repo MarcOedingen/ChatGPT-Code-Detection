@@ -11,7 +11,7 @@ def check_experiment_preconditions():
         print(
             "No dataset found. Please download the code dataset from https://th-koeln.sciebo.de/s/XZRR45yzO0rRuj3 or "
             "with the embeddings from https://th-koeln.sciebo.de/s/5kh6qOhEcO5ueFV and place the unzipped dataset in "
-            "the Datasets folder."
+            "the Datasets folder. Make sure to name it: Unformatted_Balanced_Embedded.jsonl"
         )
         exit(1)
 
