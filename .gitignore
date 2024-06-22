@@ -171,3 +171,6 @@ Plots/
 # Ignore json files
 *.json
 *jsonl
+
+
+.cog
