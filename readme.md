@@ -114,6 +114,30 @@ Parameters:
 
 ## Application
 
+### Getting Started
+
+1. Build cog docker container
+
+```bash
+cd app
+cog build -t xgb-tfidf
+```
+
+2. Run docker container
+
+```bash
+docker run -d -p 5002:5000 --platform=linux/amd64 xgb-tfidf
+```
+
+3. Go to `http://localhost:5002/docs` to see the Swagger UI
+4. Curl predictions endpoint
+
+```bash
+curl http://localhost:5002/predictions -X POST \
+--header "Content-Type: application/json" \
+--data '{"input": {"code": "hello"}}'
+```
+
 ### Tech Stack
 
 - Python 3.8
@@ -124,12 +148,18 @@ Parameters:
 If you use this code or data, please cite the following paper:
 
 ```
+
 @misc{oedingen2024chatgpt,
-      title={ChatGPT Code Detection: Techniques for Uncovering the Source of Code},
-      author={Marc Oedingen and Raphael C. Engelhardt and Robin Denz and Maximilian Hammer and Wolfgang Konen},
-      year={2024},
-      eprint={2405.15512},
-      archivePrefix={arXiv},
-      primaryClass={cs.LG}
+title={ChatGPT Code Detection: Techniques for Uncovering the Source of Code},
+author={Marc Oedingen and Raphael C. Engelhardt and Robin Denz and Maximilian Hammer and Wolfgang Konen},
+year={2024},
+eprint={2405.15512},
+archivePrefix={arXiv},
+primaryClass={cs.LG}
 }
+
+```
+
+```
+
 ```

@@ -3,9 +3,12 @@
 
 from typing import Any
 import dill as pickle
-from cog import BasePredictor, Input, Path
+from cog import BasePredictor, BaseModel, Input, Path
 import tiktoken
-import json
+
+class Output(BaseModel):
+    prediction: int
+    probability: float # Probability of the prediction to b 1
 
 class Predictor(BasePredictor):
     def setup(self) -> None:
@@ -31,6 +34,6 @@ class Predictor(BasePredictor):
         embedded_code = self.embed(tokens)
 
         pred = self.model.predict(embedded_code).astype(int)
-        pred_proba = self.model.predict_proba(embedded_code).astype(float)
+        pred_proba = self.model.predict_proba(embedded_code).astype(float)[:, 1]
       
-        return dict({"prediction": pred[0], "probability": pred_proba[0]})
+        return Output(prediction=pred[0], probability=pred_proba[0])
