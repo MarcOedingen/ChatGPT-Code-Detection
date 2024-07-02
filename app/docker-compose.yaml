@@ -1,5 +1,18 @@
 services:
   model:
-    image: 'xgb-tfidf'
+    image: 'xgb-tfidf-model'
+    platform: linux/amd64
     ports:
       - '5002:5000'
+  frontend:
+    depends_on:
+      - model
+    image: 'xgb-tfidf-frontend'
+    environment:
+      - API_URL=http://model:5000
+      - PORT=3000
+    build:
+      context: frontend
+      dockerfile: ../frontend/Dockerfile
+    ports:
+      - '3000:3000'

@@ -116,21 +116,23 @@ Parameters:
 
 ### Getting Started
 
-1. Build cog docker container
+1. Install [Cog](https://github.com/replicate/cog) and [Docker](https://www.docker.com/)
+2. Build cog docker container
 
 ```bash
 cd app
-cog build -t xgb-tfidf
+cog build -t xgb-tfidf-model
 ```
 
-2. Run docker container
+3. Run docker-compose
 
 ```bash
-docker run -d -p 5002:5000 --platform=linux/amd64 xgb-tfidf
+docker-compose up
 ```
 
-3. Go to `http://localhost:5002/docs` to see the Swagger UI
-4. Curl predictions endpoint
+4. Go to `http://localhost:3000` to see UI
+5. Go to `http://localhost:5002/docs` to see the Swagger UI
+6. Curl predictions endpoint directly
 
 ```bash
 curl http://localhost:5002/predictions -X POST \
@@ -138,10 +140,18 @@ curl http://localhost:5002/predictions -X POST \
 --data '{"input": {"code": "hello"}}'
 ```
 
+### TODO
+
+- [ ] Check with Marc for new TF-IDF .pkl file
+- [ ] Figure out CSFR with SvelteKit
+- [ ] Check for ways to deploy docker-compose
+
 ### Tech Stack
 
 - Python 3.8
 - [Cog](https://github.com/replicate/cog) for building model prediction API container
+- Docker
+- SvelteKit
 
 ## Reference
 
