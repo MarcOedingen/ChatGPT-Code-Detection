@@ -169,7 +169,7 @@ Final_Datasets/
 Plots/
 
 # Ignore json files
-*.json
+!app/**/*.json
 *jsonl
 
 
