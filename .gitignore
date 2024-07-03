@@ -14,7 +14,6 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
 lib64/
 parts/
 sdist/
@@ -171,6 +170,5 @@ Plots/
 # Ignore json files
 !app/**/*.json
 *jsonl
-
 
 .cog
