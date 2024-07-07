@@ -1,12 +1,12 @@
 <script lang="ts">
 	import CodeEditor from '$lib/components/ui/codeEditor.svelte';
 	import * as Form from "$lib/components/ui/form";
-	import SuperDebug, {
+	import Label from '$lib/components/ui/label/label.svelte';
+	import Progress from '$lib/components/ui/progress/progress.svelte';
+	import {
 		superForm
 	} from 'sveltekit-superforms';
 	import type { PageData } from './$types';
-	import Progress from '$lib/components/ui/progress/progress.svelte';
-	import Label from '$lib/components/ui/label/label.svelte';
     
     export let data: PageData;
     let resultEl: HTMLDivElement;
@@ -56,16 +56,16 @@
                         {$message}
                     </div>
                 {/if}
-        {#if prediction !== null}
-            <div bind:this={resultEl} class="w-full bg-neutral-100 border border-neutral-400 text-neutral-700 px-4 py-3 rounded relative" role="alert">
-                {#if prediction === 1}
-                    <span>🤖 The provided code snippet is likely to be generated <strong class="font-bold">with ChatGPT</strong></span>
-                {:else}
-                <span>✍️ The provided code snippet is likely to be <strong class="font-bold">not</strong> generated with ChatGPT</span>
-                {/if}
-            </div>
-            
-        {/if}
-        
+        <div bind:this={resultEl} class="w-full">
+            {#if prediction !== null}
+                <div class="w-full bg-neutral-100 border border-neutral-400 text-neutral-700 px-4 py-3 rounded relative" role="alert">
+                    {#if prediction === 1}
+                        <span>🤖 The provided code snippet is likely to be generated <strong class="font-bold">with ChatGPT</strong></span>
+                    {:else}
+                    <span>✍️ The provided code snippet is likely to be <strong class="font-bold">not</strong> generated with ChatGPT</span>
+                    {/if}
+                </div>
+            {/if}
+        </div>
     </div>
 
