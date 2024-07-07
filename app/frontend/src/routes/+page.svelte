@@ -9,6 +9,7 @@
 	import Label from '$lib/components/ui/label/label.svelte';
     
     export let data: PageData;
+    let resultEl: HTMLDivElement;
     let prediction: 0 | 1 | null = null;
     let probability: number  = 0;
 
@@ -22,6 +23,10 @@
             const { data: { data: output} } = result;
             prediction = output.prediction;
             probability = output.probability;
+
+            if (resultEl) {
+                resultEl.scrollIntoView({ behavior: "smooth" });
+            }
         },
         resetForm: false,
     
@@ -52,11 +57,11 @@
                     </div>
                 {/if}
         {#if prediction !== null}
-            <div class="w-full bg-neutral-100 border border-neutral-400 text-neutral-700 px-4 py-3 rounded relative" role="alert">
+            <div bind:this={resultEl} class="w-full bg-neutral-100 border border-neutral-400 text-neutral-700 px-4 py-3 rounded relative" role="alert">
                 {#if prediction === 1}
-                    <span>The provided code snippet is likely to be generated <strong class="font-bold">with ChatGPT</strong></span>
+                    <span>🤖 The provided code snippet is likely to be generated <strong class="font-bold">with ChatGPT</strong></span>
                 {:else}
-                <span>The provided code snippet is likely to be <strong class="font-bold">not</strong> generated <strong class="font-bold">with ChatGPT</strong></span>
+                <span>✍️ The provided code snippet is likely to be <strong class="font-bold">not</strong> generated with ChatGPT</span>
                 {/if}
             </div>
             
