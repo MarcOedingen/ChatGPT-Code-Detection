@@ -140,12 +140,6 @@ curl http://localhost:5002/predictions -X POST \
 --data '{"input": {"code": "hello"}}'
 ```
 
-### TODO
-
-- [ ] Check with Marc for new TF-IDF .pkl file
-- [ ] Figure out CSFR with SvelteKit
-- [ ] Check for ways to deploy docker-compose
-
 ### Tech Stack
 
 - Python 3.8

@@ -1,5 +1,3 @@
-<!-- TODO: add python lang support -->
-
 <script lang="ts">
     import CodeMirror from "svelte-codemirror-editor";
 
