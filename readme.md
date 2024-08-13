@@ -148,22 +148,19 @@ curl http://localhost:5002/predictions -X POST \
 - SvelteKit
 
 ## Reference
-
 If you use this code or data, please cite the following paper:
 
-```
-
-@misc{oedingen2024chatgpt,
-title={ChatGPT Code Detection: Techniques for Uncovering the Source of Code},
-author={Marc Oedingen and Raphael C. Engelhardt and Robin Denz and Maximilian Hammer and Wolfgang Konen},
-year={2024},
-eprint={2405.15512},
-archivePrefix={arXiv},
-primaryClass={cs.LG}
+```bibtex
+@article{ai5030053,
+	author = {Oedingen, Marc and Engelhardt, Raphael C. and Denz, Robin and Hammer, Maximilian and Konen, Wolfgang},
+	doi = {10.3390/ai5030053},
+	issn = {2673-2688},
+	journal = {AI},
+	number = {3},
+	pages = {1066--1094},
+	title = {ChatGPT Code Detection: Techniques for Uncovering the Source of Code},
+	url = {https://www.mdpi.com/2673-2688/5/3/53},
+	volume = {5},
+	year = {2024},
 }
-
-```
-
-```
-
 ```
